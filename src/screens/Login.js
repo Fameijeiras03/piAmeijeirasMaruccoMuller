@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable,TextInput } from 'react-native';
 import { auth,db } from '../firebase/config.js';
 
@@ -6,7 +6,15 @@ function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState('');
-    
+    //Funcion de "recordarme"
+    useEffect(() => {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                props.navigation.navigate('Home')
+            }
+        })
+    }, [])
+
     function loguearse() {
         if (!email.includes('@')) {
             setLoginError('Email invalido');
