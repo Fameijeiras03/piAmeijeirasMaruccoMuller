@@ -8,11 +8,13 @@ function Home(props) {
 
     function logout() {
         auth.signOut()
+        console.log("hola?");
+        
     }
 
     return(
         <View style={styles.container}>
-            <Pressable onPress={logout} style={styles.botonLogout}>
+            <Pressable onPress={() => logout()} style={styles.botonLogout}>
                 <Text style={styles.botonTexto}>Cerrar sesión</Text>
             </Pressable>
         </View>

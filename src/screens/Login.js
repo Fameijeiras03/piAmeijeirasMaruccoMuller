@@ -10,7 +10,7 @@ function Login(props) {
     useEffect(() => {
         auth.onAuthStateChanged(user => {
             if (user) {
-                props.navigation.navigate('Home')
+                props.navigation.navigate('HomeMenu')
             }
         })
     }, [])
