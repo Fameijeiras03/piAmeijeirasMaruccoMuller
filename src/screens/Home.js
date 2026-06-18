@@ -1,43 +1,62 @@
-
-import react, { useState, useEffect } from 'react';
-import { View, Text, Pressable, StyleSheet, FlatList } from 'react-native';
-import { auth, db} from '../firebase/config';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { db } from '../firebase/config';
+import Post from '../components/Post';
 
 function Home(props) {
 
-    function logout() {
-        auth.signOut()
-        console.log("hola?");
-        
+
+    const [posteos, setPosteos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+
+
+        db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(docs => {
+            let posts = [];
+            docs.forEach(doc => {
+                posts.push({
+                    id: doc.id,
+                    data: doc.data()
+                });
+            });
+
+            setPosteos(posts);
+            setLoading(false);
+        });
+
+    }, []); 
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#000" />
+            </View>
+        );
     }
 
-    return(
+    return (
         <View style={styles.container}>
-            <Pressable onPress={() => logout()} style={styles.botonLogout}>
-                <Text style={styles.botonTexto}>Cerrar sesión</Text>
-            </Pressable>
+            <FlatList
+                data={posteos}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                    <Post
+                        data={item.data}
+                        id={item.id}
+                        navigation={props.navigation}
+                    />
+                )}
+            />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: '#f0f4f8',
-    },
-    botonLogout: {
-        backgroundColor: '#e03e3e',
-        paddingVertical: 14,
-        paddingHorizontal: 32,
-        borderRadius: 12,
-    },
-    botonTexto: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '700',
     },
 });
 
