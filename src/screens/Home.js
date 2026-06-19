@@ -5,10 +5,35 @@ import Post from '../components/Post';
 
 function Home(props) {
 
-    function logout() {
-        auth.signOut()
-        console.log('se deslogueo el user')
-        props.navigation.navigate('Login')
+
+    const [posteos, setPosteos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+
+
+        db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(docs => {
+            let posts = [];
+            docs.forEach(doc => {
+                posts.push({
+                    id: doc.id,
+                    data: doc.data()
+                });
+            });
+
+            setPosteos(posts);
+            setLoading(false);
+        });
+
+    }, []); 
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#000" />
+            </View>
+        );
     }
 
     return (
