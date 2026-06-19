@@ -8,6 +8,8 @@ function Home(props) {
 
     function logout() {
         auth.signOut()
+        console.log('se deslogueo el user')
+        props.navigation.navigate('Login')
     }
 
     return(
