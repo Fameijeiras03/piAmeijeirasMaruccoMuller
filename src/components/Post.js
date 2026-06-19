@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable , Image } from "react-native";
 import { db, auth } from "../firebase/config";
 import firebase from "firebase";
 
 function Post(props) {
-  const { email, description, likes, comentarios } = props.data;
+  const { email, description, likes, comentarios , photo } = props.data;
   const usuarioActual = auth.currentUser ? auth.currentUser.email : null;
 
   function darLike() {
@@ -36,6 +36,14 @@ function Post(props) {
       <Text>Creado por: {email}</Text>
       <Text>{description}</Text>
 
+      {photo ? (
+        <Image
+          source={{ uri: `data:image/png;base64,${photo}` }}
+          style={styles.imagen}
+          resizeMode="contain"
+        />
+      ) : null}
+
       <Text>Likes: {likes ? likes.length : 0}</Text>
       <Text>Comentarios: {comentarios ? comentarios.length : 0}</Text>
       {yaLikeo ? (
@@ -66,6 +74,12 @@ const styles = StyleSheet.create({
     color: "blue",
     fontWeight: "bold",
     marginTop: 10,
+  },
+  imagen: {
+    width: "100%",
+    height: 250,
+    marginTop: 10,
+    marginBottom: 10,
   }
 });
 

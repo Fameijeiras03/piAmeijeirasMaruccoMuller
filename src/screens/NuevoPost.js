@@ -20,6 +20,7 @@ function NuevoPost(props) {
     })
     .then(() => {
       setDescription("");
+      props.navigation.navigate("Home");
     })
     .catch((error) => {
       console.log(error.message);
