@@ -1,8 +1,7 @@
-
-import react, { useState, useEffect } from 'react';
-import { View, Text, Pressable, StyleSheet, FlatList } from 'react-native';
-import { auth, db} from '../firebase/config';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { db } from '../firebase/config';
+import Post from '../components/Post';
 
 function Home(props) {
 
@@ -12,32 +11,27 @@ function Home(props) {
         props.navigation.navigate('Login')
     }
 
-    return(
+    return (
         <View style={styles.container}>
-            <Pressable onPress={logout} style={styles.botonLogout}>
-                <Text style={styles.botonTexto}>Cerrar sesión</Text>
-            </Pressable>
+            <FlatList
+                data={posteos}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                    <Post
+                        data={item.data}
+                        id={item.id}
+                        navigation={props.navigation}
+                    />
+                )}
+            />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: '#f0f4f8',
-    },
-    botonLogout: {
-        backgroundColor: '#e03e3e',
-        paddingVertical: 14,
-        paddingHorizontal: 32,
-        borderRadius: 12,
-    },
-    botonTexto: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '700',
     },
 });
 
